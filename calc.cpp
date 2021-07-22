@@ -166,115 +166,19 @@ std::vector<std::string> Addition(std::vector<std::string> &expression) {
 
 }
 
-std::vector<std::string> FiLLInTests() {
-  std::vector<std::string> tests;
-  std::string s;
 
-  s = "3*3-3*3";
-  tests.push_back(s);
-  s = "10-2*3-2+1";
-  tests.push_back(s);
-  s = "5+10-2*3-2+1";
-  tests.push_back(s);
-  s = "10-5-2*3-2+1";
-  tests.push_back(s);
-  s = "3*3-1+1-3*3";
-  tests.push_back(s);
-  s = "3*3-1+1-3*3+1";
-  tests.push_back(s);
-  s = "2+2+2+3*3-2-2-2";
-  tests.push_back(s);
-  s = "3*3-1+1-3*3-1+1+3*3";
-  tests.push_back(s);
-  s = "3*3-1+1-3*3-1+1+3*3+1";
-  tests.push_back(s);
-  s = "3*3-1+1+3*3";
-  tests.push_back(s);
-  s = "1+1+1+1";
-  tests.push_back(s);
-  s = "2 * 2 * 2 * 2";
-  tests.push_back(s);
-  s = "1+1+1+1+2*2*2*2";
-  tests.push_back(s);
-  s = "1+1+1+1-2*2*2*2+12+1";
-  tests.push_back(s);
-  s = "3*3-3*3+3*3-3*3";
-  tests.push_back(s);
-  s = "1*2*3*4*5";
-  tests.push_back(s);
-  s = "1*2*3*4*5-5*4*3*2*1*0";
-  tests.push_back(s);
-  return tests;
-
-}
-
-std::vector<std::string> GetAnswers() {
-  std::vector<std::string> tests;
-  std::string s;
-
-  //["0", "3", "8", "-2", "0", "1", "9", "9", "10", "18", "4", "16", "20", "1", "0", "120", "120", "12", "1"]
-
-
-  s = "0";
-  tests.push_back(s);
-  s = "3";
-  tests.push_back(s);
-  s = "8";
-  tests.push_back(s);
-  s = "-2";
-  tests.push_back(s);
-  s = "0";
-  tests.push_back(s);
-  s = "1";
-  tests.push_back(s);
-  s = "9";
-  tests.push_back(s);
-  s = "9";
-  tests.push_back(s);
-  s = "10";
-  tests.push_back(s);
-  s = "18";
-  tests.push_back(s);
-  s = "4";
-  tests.push_back(s);
-  s = "16";
-  tests.push_back(s);
-  s = "20";
-  tests.push_back(s);
-  s = "1";
-  tests.push_back(s);
-  s = "0";
-  tests.push_back(s);
-  s = "120";
-  tests.push_back(s);
-  s = "120";
-  tests.push_back(s);
-  return tests;
-}
 
 
 
 int main() {
-  //std::string input = Input();
-  std::vector<std::string> tests = FiLLInTests();
-  std::vector<std::string> answers = GetAnswers();
-  unsigned long int i = 0;
-  for (void; i < tests.size(); i++) {
+    std::string input = Input();
     std::string input = tests[i];
     std::vector<std::string> expression = Parse(input);
 
     std::vector<std::string> reverse_polish_recording = GetReversePolishRecording(expression);
     std::vector<std::string> answer = Addition(reverse_polish_recording);
   
-    if (answer[0] != answers[i]) {
-      printf("EROR");
-      printf(tests[i].c_str());
-    }
-    printf(answer[0].c_str());
-    printf("   ");
-    printf(answers[i].c_str());
-    printf("\n");
 
   }
-  //print(answer);
+  print(answer);
 }
