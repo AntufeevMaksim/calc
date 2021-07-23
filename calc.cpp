@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -11,7 +12,7 @@ std::string Input() {
   return input;
 }
 
-void print(std::vector<std::string> &answer) {
+void print(std::vector<std::string>& answer) {
   printf(answer[0].c_str());
 }
 
@@ -25,7 +26,7 @@ bool ThisOperand(const char c) {
   return false;
 }
 
-bool ThisOperand(std::string &c) {
+bool ThisOperand(std::string& c) {
   if (c == "+" || c == "-" || c == "*" || c == "/" || c == "(" || c == ")") {
     return true;
   }
@@ -130,7 +131,7 @@ std::string ADD(int num1, int num2, std::string& operator_) {
   }
 }
 
-std::vector<std::string> Addition(std::vector<std::string> &expression) {
+std::vector<std::string> Addition(std::vector<std::string>& expression) {
   unsigned long int size1 = 1;
   int num1 = 0;
   int num2 = 0;
@@ -141,8 +142,8 @@ std::vector<std::string> Addition(std::vector<std::string> &expression) {
     unsigned long int i = 0;
     for (void; i < expression.size(); i++) {
       if (ThisOperand(expression[i])) {
-        num1 = std::stoi(expression[i-2]);
-        num2 = std::stoi(expression[i-1]);
+        num1 = std::stoi(expression[i - 2]);
+        num2 = std::stoi(expression[i - 1]);
         operator_ = expression[i];
         break;
       }
@@ -150,15 +151,15 @@ std::vector<std::string> Addition(std::vector<std::string> &expression) {
 
     std::string res = ADD(num1, num2, operator_);
 
-    expression.erase(expression.begin()+i-2, expression.begin()+i);
+    expression.erase(expression.begin() + i - 2, expression.begin() + i);
 
     //if (expression.size() == i-1) {
     //  expression.insert(expression.end()-2, res);
     //}
     //else if (expression.size() > 0){
-    expression[i-2] = res;
-//    expression.insert(expression.begin() + i - 2, res);
-    
+    expression[i - 2] = res;
+    //    expression.insert(expression.begin() + i - 2, res);
+
   }
 
   return expression;
@@ -171,14 +172,12 @@ std::vector<std::string> Addition(std::vector<std::string> &expression) {
 
 
 int main() {
-    std::string input = Input();
-    std::string input = tests[i];
-    std::vector<std::string> expression = Parse(input);
+  std::string input = Input();
+  std::vector<std::string> expression = Parse(input);
 
-    std::vector<std::string> reverse_polish_recording = GetReversePolishRecording(expression);
-    std::vector<std::string> answer = Addition(reverse_polish_recording);
-  
+  std::vector<std::string> reverse_polish_recording = GetReversePolishRecording(expression);
+  std::vector<std::string> answer = Addition(reverse_polish_recording);
 
-  }
   print(answer);
 }
+
