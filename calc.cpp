@@ -11,7 +11,7 @@ std::string Input() {
   return input;
 }
 
-void print(std::vector<std::string> &answer) {
+void print(std::vector<std::string>& answer) {
   printf(answer[0].c_str());
 }
 
@@ -25,7 +25,7 @@ bool ThisOperand(const char c) {
   return false;
 }
 
-bool ThisOperand(std::string &c) {
+bool ThisOperand(std::string& c) {
   if (c == "+" || c == "-" || c == "*" || c == "/" || c == "(" || c == ")") {
     return true;
   }
@@ -71,22 +71,39 @@ bool PriorityOperand(const std::vector<std::string>& operands) {
   return false;
 }
 
+
+unsigned long int IndexAfterBrackets(std::vector<std::string>& operands) {
+  unsigned long int i = 0;
+  for (void; i < operands.size(); i++) {
+    if (operands[i] == "(") {
+      return i;
+    }
+  }
+  return i;
+}
+
 std::vector<std::string> GetReversePolishRecording(const std::vector<std::string>& expression) {
   std::vector<std::string> result;
   std::vector<std::string> operands;
 
-
+  
 
   for (const std::string& element : expression) {
 
     if (element == "+" || element == "-") {
 
-      std::reverse(operands.begin(), operands.end());
-      for (const auto& operand : operands) {
-        result.push_back(operand);
+      while (operands.size() > 0) {
+        if (operands.back() != "(") {
+          result.push_back(operands.back());
+          operands.pop_back();
+        }
+        else {
+          break;
+        }
       }
+
+
       //std::copy(operands.begin(), operands.end(), std::back_inserter(result));
-      operands.clear();
       operands.push_back(element);
       continue;
     }
@@ -101,10 +118,28 @@ std::vector<std::string> GetReversePolishRecording(const std::vector<std::string
       continue;
     }
 
+    if (element == ")") {
+      while (operands.size() > 0) {
+        if (operands.back() != "(") {
+          result.push_back(operands.back());
+          operands.pop_back();
+        }
+        else {
+          operands.pop_back();
+          break;
+        }
+      }
+      continue;
+    }
 
+    if (element == "(") {
+      operands.push_back(element);
+      continue;
+    }
 
-    result.push_back(element);
-
+    if (element != "") {
+      result.push_back(element);
+    }
   }
   std::reverse(operands.begin(), operands.end());
   for (const auto& operand : operands) {
@@ -112,6 +147,7 @@ std::vector<std::string> GetReversePolishRecording(const std::vector<std::string
   }
   return result;
 }
+
 std::string ADD(int num1, int num2, std::string& operator_) {
   if (operator_ == "+") {
     return std::to_string(num1 + num2);
@@ -130,7 +166,7 @@ std::string ADD(int num1, int num2, std::string& operator_) {
   }
 }
 
-std::vector<std::string> Addition(std::vector<std::string> &expression) {
+std::vector<std::string> Addition(std::vector<std::string>& expression) {
   unsigned long int size1 = 1;
   int num1 = 0;
   int num2 = 0;
@@ -141,8 +177,8 @@ std::vector<std::string> Addition(std::vector<std::string> &expression) {
     unsigned long int i = 0;
     for (void; i < expression.size(); i++) {
       if (ThisOperand(expression[i])) {
-        num1 = std::stoi(expression[i-2]);
-        num2 = std::stoi(expression[i-1]);
+        num1 = std::stoi(expression[i - 2]);
+        num2 = std::stoi(expression[i - 1]);
         operator_ = expression[i];
         break;
       }
@@ -150,15 +186,10 @@ std::vector<std::string> Addition(std::vector<std::string> &expression) {
 
     std::string res = ADD(num1, num2, operator_);
 
-    expression.erase(expression.begin()+i-2, expression.begin()+i);
+    expression.erase(expression.begin() + i - 2, expression.begin() + i);
 
-    //if (expression.size() == i-1) {
-    //  expression.insert(expression.end()-2, res);
-    //}
-    //else if (expression.size() > 0){
-    expression[i-2] = res;
-//    expression.insert(expression.begin() + i - 2, res);
-    
+    expression[i - 2] = res;
+
   }
 
   return expression;
@@ -204,15 +235,37 @@ std::vector<std::string> FiLLInTests() {
   tests.push_back(s);
   s = "1*2*3*4*5-5*4*3*2*1*0";
   tests.push_back(s);
+  s = "((((1+2)*(2-1)-(1+2))*2)*2+(1*0)*10)+(1+1)*2";
+  tests.push_back(s);
+  s = "10-(((10-7)+5-4)*3)";
+  tests.push_back(s);
+  s = "2*3-2+(1-1+(5-4)+1-1)-(2+2)";
+  tests.push_back(s);
+  s = "2+3+(5+4)-((5-4)*3)";
+  tests.push_back(s);
+  s = "(((1+2)*(2-1)-(1+2))*2)+1";
+  tests.push_back(s);
+  s = "(((1+2)*(2-1)-(1+2))*2)+(1*0)*10";
+  tests.push_back(s);
+  s = "(((1+2)*(2-1)-(1+2))*2)*2+(1*0)*10";
+  tests.push_back(s);
+  s = "(8+2*5)/(1+3*2-4)";
+  tests.push_back(s);
+  s = "6/3*5";
+  tests.push_back(s);
+  s = "3+4*2/(1-5)";
+  tests.push_back(s);
+
   return tests;
 
 }
 
+
+
+
 std::vector<std::string> GetAnswers() {
   std::vector<std::string> tests;
   std::string s;
-
-  //["0", "3", "8", "-2", "0", "1", "9", "9", "10", "18", "4", "16", "20", "1", "0", "120", "120", "12", "1"]
 
 
   s = "0";
@@ -249,13 +302,34 @@ std::vector<std::string> GetAnswers() {
   tests.push_back(s);
   s = "120";
   tests.push_back(s);
+   
+  s = "4";
+  tests.push_back(s);
+  s = "-2";
+  tests.push_back(s);
+  s = "1";
+  tests.push_back(s);
+  s = "11";
+  tests.push_back(s);
+  s = "1";
+  tests.push_back(s);
+  s = "0";
+  tests.push_back(s);
+  s = "0";
+  tests.push_back(s);
+  s = "6";
+  tests.push_back(s);
+  s = "10";
+  tests.push_back(s);
+  s = "1";
+  tests.push_back(s);
   return tests;
 }
 
 
 
 int main() {
-  //std::string input = Input();
+  
   std::vector<std::string> tests = FiLLInTests();
   std::vector<std::string> answers = GetAnswers();
   unsigned long int i = 0;
@@ -265,7 +339,7 @@ int main() {
 
     std::vector<std::string> reverse_polish_recording = GetReversePolishRecording(expression);
     std::vector<std::string> answer = Addition(reverse_polish_recording);
-  
+
     if (answer[0] != answers[i]) {
       printf("EROR");
       printf(tests[i].c_str());
@@ -276,6 +350,5 @@ int main() {
     printf("\n");
 
   }
-  //print(answer);
+ 
 }
-
