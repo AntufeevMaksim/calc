@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -72,22 +71,39 @@ bool PriorityOperand(const std::vector<std::string>& operands) {
   return false;
 }
 
+
+unsigned long int IndexAfterBrackets(std::vector<std::string>& operands) {
+  unsigned long int i = 0;
+  for (void; i < operands.size(); i++) {
+    if (operands[i] == "(") {
+      return i;
+    }
+  }
+  return i;
+}
+
 std::vector<std::string> GetReversePolishRecording(const std::vector<std::string>& expression) {
   std::vector<std::string> result;
   std::vector<std::string> operands;
 
-
+  
 
   for (const std::string& element : expression) {
 
     if (element == "+" || element == "-") {
 
-      std::reverse(operands.begin(), operands.end());
-      for (const auto& operand : operands) {
-        result.push_back(operand);
+      while (operands.size() > 0) {
+        if (operands.back() != "(") {
+          result.push_back(operands.back());
+          operands.pop_back();
+        }
+        else {
+          break;
+        }
       }
+
+
       //std::copy(operands.begin(), operands.end(), std::back_inserter(result));
-      operands.clear();
       operands.push_back(element);
       continue;
     }
@@ -102,10 +118,28 @@ std::vector<std::string> GetReversePolishRecording(const std::vector<std::string
       continue;
     }
 
+    if (element == ")") {
+      while (operands.size() > 0) {
+        if (operands.back() != "(") {
+          result.push_back(operands.back());
+          operands.pop_back();
+        }
+        else {
+          operands.pop_back();
+          break;
+        }
+      }
+      continue;
+    }
 
+    if (element == "(") {
+      operands.push_back(element);
+      continue;
+    }
 
-    result.push_back(element);
-
+    if (element != "") {
+      result.push_back(element);
+    }
   }
   std::reverse(operands.begin(), operands.end());
   for (const auto& operand : operands) {
@@ -113,6 +147,7 @@ std::vector<std::string> GetReversePolishRecording(const std::vector<std::string
   }
   return result;
 }
+
 std::string ADD(int num1, int num2, std::string& operator_) {
   if (operator_ == "+") {
     return std::to_string(num1 + num2);
@@ -153,12 +188,7 @@ std::vector<std::string> Addition(std::vector<std::string>& expression) {
 
     expression.erase(expression.begin() + i - 2, expression.begin() + i);
 
-    //if (expression.size() == i-1) {
-    //  expression.insert(expression.end()-2, res);
-    //}
-    //else if (expression.size() > 0){
     expression[i - 2] = res;
-    //    expression.insert(expression.begin() + i - 2, res);
 
   }
 
@@ -166,9 +196,6 @@ std::vector<std::string> Addition(std::vector<std::string>& expression) {
 
 
 }
-
-
-
 
 
 int main() {
@@ -179,5 +206,4 @@ int main() {
   std::vector<std::string> answer = Addition(reverse_polish_recording);
 
   print(answer);
-}
-
+//}
